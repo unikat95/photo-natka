@@ -1,36 +1,150 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Photonatka – Photography Portfolio & Admin Panel
 
-## Getting Started
+Photonatka is a full‑stack photography platform built with Next.js, designed for professional photographers who need both a public portfolio and a private system for delivering photos to clients. The application includes a secure admin panel, public galleries, private password‑protected albums, and a scalable architecture for future features.
 
-First, run the development server:
+---------------------------------------------------------------------
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Overview
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Photonatka consists of two main areas:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Public Website
+- Homepage with featured photos
+- Public galleries (categories, albums, collections)
+- Fast, optimized image loading
+- SEO‑friendly routing
+- Clean, minimalistic UI for showcasing photography
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Private Client Area
+- Photographer can create private albums for clients
+- Each album can be shared via a unique link
+- Optional password protection
+- Clients can securely view their photos
+- Future‑ready for:
+  - downloads
+  - selecting favorites
+  - commenting
+  - watermarking
 
-## Learn More
+### Admin Panel
+- Accessible only to the photographer (single admin account)
+- Admin‑only registration (only one user can register)
+- Credential‑based login (NextAuth)
+- Session‑protected routes using server‑side layout guard
+- Ability to manage:
+  - public galleries
+  - private client albums
+  - uploaded photos
+  - pricing pages
+  - homepage content
 
-To learn more about Next.js, take a look at the following resources:
+---------------------------------------------------------------------
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Authentication
+- Credential‑based login using NextAuth
+- Admin‑only registration (blocked after first account)
+- Secure session cookies
+- Server‑side session validation
+- Protected admin panel using layout guard (no duplication across pages)
 
-## Deploy on Vercel
+### Galleries & Albums
+- Public galleries visible to all visitors
+- Private albums accessible only via:
+  - unique share link
+  - optional password
+- Future support for:
+  - expiring links
+  - client download permissions
+  - watermarking
+  - album analytics
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Uploads
+- UploadThing integration for image uploads
+- Automatic file validation
+- Ready for future:
+  - resizing
+  - compression
+  - CDN delivery
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Database
+- Prisma ORM
+- PostgreSQL (Supabase)
+- Models:
+  - User (admin)
+  - Gallery
+  - Album
+  - Photo
+  - ClientAccess (for password‑protected albums)
+
+---------------------------------------------------------------------
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 18
+- NextAuth (Credentials Provider)
+- Prisma ORM
+- PostgreSQL (Supabase)
+- UploadThing
+- TypeScript
+- TailwindCSS
+
+---------------------------------------------------------------------
+
+## Project Structure
+
+app/
+  admin-panel/
+    layout.tsx        # Global auth guard for all admin pages
+    page.tsx          # Admin dashboard
+    albums/
+      page.tsx        # Example protected subpage
+  galleries/
+    page.tsx          # Public galleries
+  album/
+    [id]/
+      page.tsx        # Public or private album view
+  api/
+    auth/
+      [...nextauth]/  # NextAuth handlers
+components/
+  LoginForm/
+  LogoutButton/
+  GalleryGrid/
+  AlbumViewer/
+lib/
+  db.ts               # Prisma client
+prisma/
+  schema.prisma
+
+---------------------------------------------------------------------
+
+## Authentication Flow
+
+1. First user registers → becomes admin.
+2. If admin exists → registration is blocked.
+3. Admin logs in using credentials.
+4. Session stored in secure cookies.
+5. Admin panel is protected by a server‑side layout.
+6. All subpages under /admin-panel/* inherit protection automatically.
+
+---------------------------------------------------------------------
+
+## Private Album Flow
+
+1. Admin creates an album for a client.
+2. System generates a unique share link, for example:
+   /album/abc123
+3. Admin can optionally set a password.
+4. Client opens the link:
+   - If album is public → sees photos immediately.
+   - If album is protected → must enter password.
+5. Client views photos in a clean, responsive layout.
+
+---------------------------------------------------------------------
+
+## License
+
+This project is private and not intended for public distribution.
